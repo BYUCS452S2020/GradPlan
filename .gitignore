@@ -1,5 +1,6 @@
 ## DJANGO
 __pycache__
+static
 
 # MySQL config
 gradplan.cnf
