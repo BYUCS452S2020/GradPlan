@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'school',
+    'student',
 ]
 
 MIDDLEWARE = [
@@ -106,6 +108,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+<<<<<<< HEAD
+=======
+AUTH_USER_MODEL = 'student.Student'
+
+>>>>>>> DBSchema
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
