@@ -108,11 +108,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-<<<<<<< HEAD
-=======
 AUTH_USER_MODEL = 'student.Student'
 
->>>>>>> DBSchema
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
