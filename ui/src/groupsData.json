@@ -1,0 +1,113 @@
+{
+    "CourseGroups": [
+        {
+            "id": 1,
+            "group": 1,
+            "course": [
+                {
+                    "id": 1,
+                    "credits": 3,
+                    "course_number": 142,
+                    "department": "CS"
+                },
+                {
+                    "id": 2,
+                    "credits": 3,
+                    "course_number": 235,
+                    "department": "CS"
+                },
+                {
+                    "id": 98,
+                    "credits": 3,
+                    "course_number": 1002,
+                    "department": "CS"
+                },
+                {
+                    "id": 99,
+                    "credits": 3,
+                    "course_number": 200,
+                    "department": "CS"
+                },
+                {
+                    "id": 95,
+                    "credits": 3,
+                    "course_number": 494,
+                    "department": "CS"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "group": "6",
+            "course": [
+                {
+                    "id": 4,
+                    "credits": 3,
+                    "course_number": 240,
+                    "department": "CS"
+                },
+                {
+                    "id": 5,
+                    "credits": 3,
+                    "course_number": 260,
+                    "department": "CS"
+                },
+                {
+                    "id": 6,
+                    "credits": 3,
+                    "course_number": 324,
+                    "department": "CS"
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "group": "1",
+            "course": [
+                {
+                    "id": 7,
+                    "credits": 3,
+                    "course_number": 430,
+                    "department": "CS"
+                },
+                {
+                    "id": 8,
+                    "credits": 3,
+                    "course_number": 312,
+                    "department": "CS"
+                },
+                {
+                    "id": 9,
+                    "credits": 3,
+                    "course_number": 340,
+                    "department": "CS"
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "group": "2",
+            "course": [
+                {
+                    "id": 10,
+                    "credits": 3,
+                    "course_number": 402,
+                    "department": "CS"
+                },
+                {
+                    "id": 32,
+                    "credits": 3,
+                    "course_number": 401,
+                    "department": "CS"
+                },
+                {
+                    "id": 43,
+                    "credits": 3,
+                    "course_number": 400,
+                    "department": "CS"
+                }
+            ]
+        }
+    ]
+
+}

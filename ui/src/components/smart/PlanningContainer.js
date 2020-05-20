@@ -1,7 +1,13 @@
 import React from 'react'
+import { PlanContainer, GroupsContainer } from '../dumb'
+
+
 
 export const PlanningContainer = (props) => {
   return (
-    <h1>HELLO PLANNING</h1>
+    <div className='d-flex justify-content-between'>
+      <PlanContainer />
+      <GroupsContainer />
+    </div>
   )
 }
