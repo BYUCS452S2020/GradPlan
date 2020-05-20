@@ -1,0 +1,57 @@
+{
+    "student": {
+        "email": "jacobtam@byu.edu",
+        "major": "CS",
+        "planned_courses": [
+            {
+                "course": [
+                    {
+                        "id": 2,
+                        "department": "CS",
+                        "course_number": 234,
+                        "credits": 3
+                    },
+                    {
+                        "id": 3,
+                        "department": "CS",
+                        "course_number": 260,
+                        "credits": 3
+                    },
+                    {
+                        "id": 9,
+                        "department": "CS",
+                        "course_number": 999,
+                        "credits": 3
+                    }
+                ],
+                "year": 2020,
+                "semester": "Fall"
+            },
+            {
+                "course": [
+                    {
+                        "id": 4,
+                        "department": "CS",
+                        "course_number": 52,
+                        "credits": 3
+                    },
+                    {
+                        "id": 5,
+                        "department": "CS",
+                        "course_number": 4343,
+                        "credits": 3
+                    },
+                    {
+                        "id": 23,
+                        "department": "CS",
+                        "course_number": 233,
+                        "credits": 3
+                    }
+                ],
+                "year": 2021,
+                "semester": "Winter"
+            }
+
+        ]
+    }
+}
