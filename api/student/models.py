@@ -1,6 +1,9 @@
 from uuid import uuid4
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 from school.models import Course, Major
 
 class StudentManager(BaseUserManager):
@@ -26,6 +29,10 @@ class StudentManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
+@receiver(models.signals.post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
 
 class Student(AbstractUser):
     """
