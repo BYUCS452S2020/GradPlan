@@ -1,10 +1,21 @@
+from django.http import Http404
 from rest_framework import status
-from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from student.models import Student
-from student.serializers import StudentSerializer
+from school.models import Course
+from school.serializers import CourseSerializer
+from student.models import PlannedCourse, Student
+from student.serializers import CompletedCourseSerializer, PlannedCourseSerializer, StudentSerializer
+
+def get_object(model, object_id, **kwargs):
+    try:
+        return model.objects.get(pk=object_id, **kwargs)
+    except model.DoesNotExist:
+        raise Http404
 
 class Login(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -34,3 +45,36 @@ class Register(APIView):
             })
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class PlannedCourses(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = PlannedCourseSerializer(PlannedCourse.objects.filter(student=request.user), many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        course = get_object(Course, request.data.get('course_id', ''))
+        planned_course = PlannedCourse(
+            student=request.user,
+            course=course,
+            year=request.data.get('year', 0),
+            semester=request.data.get('semester', ''))
+        planned_course.save()
+        return Response(status=status.HTTP_201_CREATED)
+
+
+
+class CompletedCourses(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = CourseSerializer(request.user.completed_courses.all(), many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        course = get_object(Course, request.data.get('course_id', ''))
+        request.user.completed_courses.add(course)
+        return Response(status=status.HTTP_201_CREATED)
