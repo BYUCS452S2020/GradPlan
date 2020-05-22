@@ -5,7 +5,7 @@ class PlannedCourseSerializer(serializers.ModelSerializer):
     class Meta:
         depth = 1
         model = PlannedCourse
-        fields = '__all__'
+        exclude = ['student']
 
 class CompletedCourseSerializer(serializers.ModelSerializer):
     class Meta:
