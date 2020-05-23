@@ -14,9 +14,7 @@ class CompletedCourseSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StudentSerializer(serializers.ModelSerializer):
-    completed_courses = CompletedCourseSerializer(many=True, required=False)
-    planned_courses = PlannedCourseSerializer(many=True, required=False)
 
     class Meta:
         model = Student
-        exclude = ['password', 'groups', 'last_login', 'is_active', 'is_superuser', 'is_staff', 'date_joined', 'user_permissions']
+        exclude = ['password', 'groups', 'last_login', 'is_active', 'is_superuser', 'is_staff', 'date_joined', 'user_permissions', 'planned_courses', 'completed_courses']
