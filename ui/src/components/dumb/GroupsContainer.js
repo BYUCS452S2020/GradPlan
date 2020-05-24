@@ -1,15 +1,15 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col } from 'reactstrap'
 import {GroupTabs} from './GroupTabs'
 import { TabContainer } from './TabContainer'
-
-// Testing Purposes
-import data from '../../groupsData'
+import {GetGroupsData} from '../../ApiCalls'
+import { useStateValue } from '../../context'
 
 
 export const GroupsContainer = (props) => {
+  const [state, dispatch] = useStateValue()
+  const [activeTab, setActiveTab] = useState()
 
-  const [activeTab, setActiveTab] = useState('1')
   const toggle = tab => {
     if(activeTab !== tab) {
       setActiveTab(tab)
@@ -18,10 +18,10 @@ export const GroupsContainer = (props) => {
 
   return (
     <Card className=' m-4 p-4 w-75'>
-      <GroupTabs activeTab={activeTab} toggle={toggle} data={data}/>
+      <GroupTabs activeTab={activeTab} toggle={toggle} data={state.groupData}/>
       <TabContent activeTab={activeTab}>
         {
-          data.CourseGroups.map((group) => {
+          state.groupData.map((group) => {
             return (
               <TabContainer
                 key={group.id}

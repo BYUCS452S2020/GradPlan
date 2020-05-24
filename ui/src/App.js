@@ -5,10 +5,9 @@ import {reducer} from './reducer'
 import {Routing} from './components/smart/Routing'
 
 const initialState = {
-  isAuthenticated: true,
-  major: {},
-  group: {},
-  student: {},
+  isAuthenticated: false,
+  groupData: [],
+  plannedCourses: [],
 }
 
 

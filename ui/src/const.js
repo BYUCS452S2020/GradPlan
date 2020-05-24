@@ -1,3 +1,5 @@
 export const ACTIONTYPES = {
-  isAuthenticated: 'isAuthenticated'
+  isAuthenticated: 'isAuthenticated',
+  replaceGroupData: 'replaceGroupData',
+  replacePlannedCourses: 'replacePlannedCourses',
 }
