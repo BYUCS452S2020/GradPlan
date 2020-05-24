@@ -39,10 +39,12 @@ export const Login = (props) => {
               id="examplePassword"
               onChange={e => setPassword(e.target.value)} />
           </FormGroup>
+          <FormGroup>
           <div className='align-items-center d-flex flex-column justify-content-center'>
             <Button color='success' className='w-25' onClick={handleLogin}>Login</Button>
             <Button color="link">link</Button>
           </div>
+          </FormGroup>
         </Form>
       </Card>
     </div>

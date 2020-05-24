@@ -4,14 +4,16 @@ import { NavItem, NavLink } from 'reactstrap'
 import classnames from 'classnames'
 
 export const Tab = (props) => {
-  const { activeTab, toggle, id} = props
+  const { activeTab, toggle, title, id} = props
 
   return (
     <NavItem>
       <NavLink
         className={classnames({ active: activeTab === id })}
-        onClick={() => { toggle(id.toString()); }}>
-        {`Group ${id}`}
+        onClick={() => {
+          toggle(id.toString())          
+        }}>
+        {`${title}`}
       </NavLink>
     </NavItem>
   )
@@ -20,5 +22,6 @@ export const Tab = (props) => {
 Tab.propTypes = {
   activeTab: PropTypes.string,
   toggle: PropTypes.func,
+  title: PropTypes.string,
   id: PropTypes.number,
 }

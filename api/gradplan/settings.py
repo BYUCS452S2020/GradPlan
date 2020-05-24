@@ -25,6 +25,8 @@ SECRET_KEY = '19$(s1sk^i%*$l1m0$oa^3bl$q5j4oihwel#gv+!gg2yiypv-^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
+CSRF_COOKIE_NAME = 'csrftoken'
+
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'rest_framework.authtoken',
     'school',
     'student',
@@ -55,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'gradplan.urls'
@@ -76,7 +80,11 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'gradplan.wsgi.application'
-
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:3000',
+)
+# CSRF_TRUSTED_ORIGINS = ['localhost:3000']
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

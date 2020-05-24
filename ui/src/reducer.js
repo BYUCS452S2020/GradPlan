@@ -6,5 +6,15 @@ export const reducer = (state, action) => {
         ...state,
         isAuthenticated: action.payload
       }
+    case ACTIONTYPES.replaceGroupData:
+      return {
+        ...state,
+        groupData: action.payload
+      }
+    case ACTIONTYPES.replacePlannedCourses:
+      return {
+        ...state,
+        plannedCourses: action.payload
+      }
   }
 }

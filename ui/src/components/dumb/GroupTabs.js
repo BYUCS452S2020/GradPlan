@@ -6,17 +6,18 @@ import { Tab } from './Tab'
 
 export const GroupTabs = (props) => {
   const { activeTab, toggle, data} = props
-  console.log(data)
+  // console.log(data)
   return (
     <Nav tabs>
       {
-        data.CourseGroups.map((group) => {
+        data.map((group) => {
           return (
             <Tab
               activeTab={activeTab}
               toggle={toggle}
               key={group.id}
-              id={group.id}/>)
+              id={group.id}
+              title={group.title}/>)
         })
       }
 
@@ -27,5 +28,5 @@ export const GroupTabs = (props) => {
 GroupTabs.propTypes = {
   activeTab: PropTypes.string,
   toggle: PropTypes.func,
-  data: PropTypes.object,
+  data: PropTypes.array,
 }
