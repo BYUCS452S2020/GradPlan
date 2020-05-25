@@ -4,7 +4,7 @@ import {TabPane, Row, Col} from 'reactstrap'
 import { ClassContainer } from './ClassContainer'
 
 export const TabContainer = (props) => {
-  const {tabId, courses} = props
+  const {tabId, courses, onClick} = props
   return (
     <TabPane tabId={tabId}>
       <Row>
@@ -13,7 +13,10 @@ export const TabContainer = (props) => {
             let title = course.department + ' ' + course.course_number
             return (
               <Col key={course.id}>
-                <ClassContainer title={title} />
+                <ClassContainer
+                  courseID={course.id}
+                  title={title}
+                  onClick={onClick}/>
               </Col>
             )
           })
@@ -26,4 +29,5 @@ export const TabContainer = (props) => {
 TabContainer.propTypes = {
   tabId: PropTypes.string,
   courses: PropTypes.array,
+  onClick: PropTypes.func,
 }

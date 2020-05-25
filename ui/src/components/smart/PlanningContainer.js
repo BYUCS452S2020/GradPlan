@@ -1,6 +1,6 @@
 import React from 'react'
-import { PlanContainer, GroupsContainer } from '../dumb'
-
+import { PlanContainer } from '../dumb'
+import {GroupsContainer} from './GroupsContainer'
 
 
 export const PlanningContainer = (props) => {
