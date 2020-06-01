@@ -7,15 +7,16 @@ export const LoginAPI = async (email, password, dispatch) => {
   console.log('Login')
   try {
     let resp = await client.post('http://localhost:8000/student/login', {username: email, password: password})
-    console.log(resp.data)
     client.defaults.headers.common['Authorization'] = `token ${resp.data.token}`
-    dispatch({type: ACTIONTYPES.isAuthenticated, payload: true})
+    await dispatch({type: ACTIONTYPES.isAuthenticated, payload: true})
+    GetGroupsData(dispatch)
+    GetPlannedCourses(dispatch)
+
   } catch (e) {
     console.log(e)
   }
 
-  GetGroupsData(dispatch)
-  GetPlannedCourses(dispatch)
+
 }
 
 export const GetGroupsData = async (dispatch) => {
@@ -32,9 +33,21 @@ export const GetGroupsData = async (dispatch) => {
   }
 }
 
+export const AddClassToPlanned = async (data, dispatch) => {
+  try {
+    let resp = await client.post('http://localhost:8000/student/planned', data)
+  } catch (e) {
+    console.log('FAILED TO CREATE PLANNED COURSE')
+    console.log(e)
+  }
+
+}
+
 export const GetPlannedCourses = async (dispatch) => {
   try {
     let resp = await client.get('http://localhost:8000/student/planned')
+    console.log('GET PLANNED')
+    console.log(resp.data)
     let mymap = new Map();
     let unique = resp.data.filter(el => {
       const val = mymap.get(el.semester); 

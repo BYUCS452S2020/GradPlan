@@ -6,8 +6,8 @@ import {useHistory, useLocation} from 'react-router-dom'
 
 export const Login = (props) => {
   const [state, dispatch] = useStateValue()
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
+  const [email, setEmail] = useState('jacobtamus@gmail.com')
+  const [password, setPassword] = useState('tam')
   let history = useHistory()
   let location = useLocation()
   let { from } = location.state || { from: { pathname: "/" } }
@@ -28,6 +28,7 @@ export const Login = (props) => {
               type="email"
               name="email"
               id="exampleEmail"
+              value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="example@gmail.com" />
           </FormGroup>
@@ -36,6 +37,7 @@ export const Login = (props) => {
             <Input
               type="password"
               name="password"
+              value={password}
               id="examplePassword"
               onChange={e => setPassword(e.target.value)} />
           </FormGroup>
