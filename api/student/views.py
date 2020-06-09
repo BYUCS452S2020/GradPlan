@@ -56,19 +56,61 @@ class PlannedCourses(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        serializer = PlannedCourseSerializer(
-            PlannedCourse.objects.filter(student=request.user), many=True)
-        return Response(serializer.data)
+        planned_courses = []
+        for obj in PlannedCourse.query(str(request.user.id)):
+            planned_course = {
+                'semester': obj.semester,
+                'courses': obj.courses
+            }
+            planned_courses.append(planned_course)
+
+        return Response(planned_courses)
 
     def post(self, request):
-        course = get_object(Course, request.data.get('course_id', ''))
-        planned_course = PlannedCourse(
-            student=request.user,
-            course=course,
-            year=request.data.get('year', 0),
-            semester=request.data.get('semester', ''))
-        planned_course.save()
-        return Response(status=status.HTTP_201_CREATED)
+        try:
+            if 'course_id' in request.data:
+                course = get_object(Course, request.data['course_id'])
+                semester = str(request.data['year']) + request.data['semester']
+                planned_courses = [{
+                    'course_id': str(course.id),
+                    'department': course.department,
+                    'course_number': course.course_number,
+                    'credits': float(course.credits)}]
+
+                count = PlannedCourse.count(
+                    str(request.user.id), PlannedCourse.semester == semester)
+                if count == 1:
+                    previously_planned_courses = []
+                    for obj in PlannedCourse.query(
+                            str(request.user.id), PlannedCourse.semester == semester):
+                        previously_planned_courses += obj.courses
+
+                    # Check if course is already in planned list
+                    for planned_course in planned_courses:
+                        if planned_course['course_id'] == str(course.id):
+                            return Response(status=status.HTTP_204_NO_CONTENT)
+
+                    planned_courses += previously_planned_courses
+
+                PlannedCourse(
+                    student_id=str(request.user.id),
+                    semester=semester,
+                    courses=planned_courses).save()
+            else:
+                semester = str(request.data['year']) + request.data['semester']
+                count = PlannedCourse.count(
+                    str(request.user.id), PlannedCourse.semester == semester)
+                if count == 0:
+                    planned_course = PlannedCourse(
+                        student_id=str(request.user.id),
+                        semester=semester,
+                        courses=[])
+                    planned_course.save()
+                else:
+                    return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_201_CREATED)
+        except KeyError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class PlannedCourseDetail(APIView):
@@ -76,11 +118,21 @@ class PlannedCourseDetail(APIView):
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, course_id):
-        try:
-            PlannedCourse.objects.get(
-                student=request.user, course_id=course_id).delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except PlannedCourse.DoesNotExist:
+        found = False
+        for obj in PlannedCourse.query(str(request.user.id)):
+            courses = []
+            for course in obj.courses:
+                if str(course_id) == course['course_id']:
+                    found = True
+                else:
+                    courses.append(course)
+            if found:
+                PlannedCourse(student_id=obj.student_id,
+                              semester=obj.semester,
+                              courses=courses).save()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
+        if not found:
             raise Http404
 
 
@@ -89,16 +141,32 @@ class CompletedCourses(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        serializer = CourseSerializer(
-            request.user.completed_courses.all(), many=True)
-        return Response(serializer.data)
+        completed_courses = []
+        for obj in CompletedCourse.query(str(request.user.id)):
+            completed_courses.append({
+                'course_id': obj.course.course_id,
+                'department': obj.course.department,
+                'course_number': obj.course.course_number,
+                'credits': obj.course.credits
+            })
+        return Response(completed_courses)
 
     def post(self, request):
-        course = get_object(Course, request.data.get('course_id', ''))
-        completed_course = CompletedCourse(
-            student=request.user, course=course)
-        completed_course.save()
-        return Response(status=status.HTTP_201_CREATED)
+        try:
+            course = get_object(Course, request.data['course_id'])
+            completed_course = CompletedCourse(
+                student_id=str(request.user.id),
+                course_id=str(course.id),
+                course={
+                    'course_id': str(course.id),
+                    'department': course.department,
+                    'course_number': course.course_number,
+                    'credits': float(course.credits)
+                })
+            completed_course.save()
+            return Response(status=status.HTTP_201_CREATED)
+        except KeyError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class CompletedCourseDetail(APIView):
@@ -107,8 +175,9 @@ class CompletedCourseDetail(APIView):
 
     def delete(self, request, course_id):
         try:
-            CompletedCourse.objects.get(
-                student=request.user, course_id=course_id).delete()
+            completed_course = CompletedCourse.get(
+                str(request.user.id), str(course_id))
+            completed_course.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except CompletedCourse.DoesNotExist:
-            raise Http404
+            return Response(status=status.HTTP_400_BAD_REQUEST)

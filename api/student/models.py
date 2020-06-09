@@ -3,8 +3,10 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.dispatch import receiver
+from pynamodb.models import Model
+from pynamodb.attributes import ListAttribute, MapAttribute, UnicodeAttribute
 from rest_framework.authtoken.models import Token
-from school.models import Course, Major
+from school.models import Major
 
 
 class StudentManager(BaseUserManager):
@@ -60,10 +62,6 @@ class Student(AbstractUser):
 
     major = models.ForeignKey(Major, on_delete=models.SET_NULL, null=True)
     school_id = models.CharField(max_length=50, null=True)
-    completed_courses = models.ManyToManyField(
-        Course, through='CompletedCourse', related_name='+')
-    planned_courses = models.ManyToManyField(
-        Course, through='PlannedCourse', related_name='+')
 
     objects = StudentManager()
 
@@ -71,24 +69,25 @@ class Student(AbstractUser):
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
 
-class CompletedCourse(models.Model):
-    id = models.UUIDField(default=uuid4, editable=False,
-                          primary_key=True, unique=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+class CompletedCourse(Model):
+    class Meta:
+        aws_access_key_id = 'AKIA36TR6B75TJCWV64C'
+        aws_secret_access_key = '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'
+        region = 'us-west-2'
+        table_name = "CompletedCourses"
+
+    student_id = UnicodeAttribute(hash_key=True)
+    course_id = UnicodeAttribute(range_key=True)
+    course = MapAttribute()
 
 
-class PlannedCourse(models.Model):
-    class Semester(models.TextChoices):
-        FALL = 'F', 'Fall'
-        SPRING = 'Sp', 'Spring'
-        SUMMER = 'Su', 'Summer'
-        WINTER = 'W', 'Winter'
+class PlannedCourse(Model):
+    class Meta:
+        aws_access_key_id = 'AKIA36TR6B75TJCWV64C'
+        aws_secret_access_key = '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'
+        region = 'us-west-2'
+        table_name = "PlannedCourses"
 
-    id = models.UUIDField(default=uuid4, editable=False,
-                          primary_key=True, unique=True)
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    year = models.IntegerField()
-    semester = models.CharField(
-        choices=Semester.choices, max_length=2, default=Semester.FALL)
+    student_id = UnicodeAttribute(hash_key=True)
+    semester = UnicodeAttribute(range_key=True)
+    courses = ListAttribute(null=True)
