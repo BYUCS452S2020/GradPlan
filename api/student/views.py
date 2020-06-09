@@ -113,17 +113,27 @@ class PlannedCourses(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-# class PlannedCourseDetail(APIView):
-#     authentication_classes = [TokenAuthentication]
-#     permission_classes = [IsAuthenticated]
+class PlannedCourseDetail(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
-#     def delete(self, request, course_id):
-#         try:
-#             PlannedCourse.objects.get(
-#                 student=request.user, course_id=course_id).delete()
-#             return Response(status=status.HTTP_204_NO_CONTENT)
-#         except PlannedCourse.DoesNotExist:
-#             raise Http404
+    def delete(self, request, course_id):
+        found = False
+        for obj in PlannedCourse.query(str(request.user.id)):
+            courses = []
+            for course in obj.courses:
+                if str(course_id) == course['course_id']:
+                    found = True
+                else:
+                    courses.append(course)
+            if found:
+                PlannedCourse(student_id=obj.student_id,
+                              semester=obj.semester,
+                              courses=courses).save()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
+        if not found:
+            raise Http404
 
 
 class CompletedCourses(APIView):
@@ -159,14 +169,15 @@ class CompletedCourses(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-# class CompletedCourseDetail(APIView):
-#     authentication_classes = [TokenAuthentication]
-#     permission_classes = [IsAuthenticated]
+class CompletedCourseDetail(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
-#     def delete(self, request, course_id):
-#         try:
-#             CompletedCourse.objects.get(
-#                 student=request.user, course_id=course_id).delete()
-#             return Response(status=status.HTTP_204_NO_CONTENT)
-#         except CompletedCourse.DoesNotExist:
-#             raise Http404
+    def delete(self, request, course_id):
+        try:
+            completed_course = CompletedCourse.get(
+                str(request.user.id), str(course_id))
+            completed_course.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except CompletedCourse.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
