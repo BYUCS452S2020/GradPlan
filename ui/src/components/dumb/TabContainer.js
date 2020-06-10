@@ -12,12 +12,11 @@ export const TabContainer = (props) => {
           courses.map((course) => {
             let title = course.department + ' ' + course.course_number
             return (
-              <Col key={course.id}>
-                <ClassContainer
-                  courseID={course.id}
-                  title={title}
-                  onClick={onClick}/>
-              </Col>
+              <ClassContainer
+                key={course.id}
+                courseID={course.id}
+                title={title}
+                onClick={onClick}/>
             )
           })
         }

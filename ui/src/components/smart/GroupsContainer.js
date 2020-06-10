@@ -1,14 +1,23 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { TabContent, Card} from 'reactstrap'
 import {GroupTabs, TabContainer, SelectSemesterModal, AddSemesterModal} from '../dumb'
 import { useStateValue } from '../../context'
-import { AddClassToPlanned, GetPlannedCourses } from '../../ApiCalls'
+import { AddClassToPlanned, GetPlannedCourses, GetGroupsData } from '../../ApiCalls'
 
 export const GroupsContainer = (props) => {
   const [state, dispatch] = useStateValue()
+  const [semesterSelected, setSemesterSelected] = useState()
+  useEffect(() => {
+    const fetchData = async () => {
+      await GetGroupsData(dispatch)
+      await GetPlannedCourses(dispatch, (sem) => setSemesterSelected(sem))
+    }
+    fetchData()
+
+  },[])
+
   const [activeTab, setActiveTab] = useState('1')
   const [modal, setModal] = useState(false)
-  const [semesterSelected, setSemesterSelected] = useState(`${state.plannedCourses[0].semester} ${state.plannedCourses[0].year}`)
   const [clickCourseId, setClickCourseId] = useState()
   const [addSemesterModal, setAddSemesterModal] = useState(false)
   const [semesterInput, setSemesterInput] = useState('')
@@ -56,14 +65,17 @@ export const GroupsContainer = (props) => {
   }
 
   const onAddCourseToPlanned = async () => {
+    console.log('____________________')
+    console.log(semesterSelected)
+    //FIXME: year: semesterSelected.match(/\d+/g).map(Number)[0], when semesterSelected Is null because the component just rendered it. the field doesn't have a value
     let data = {
       course_id: clickCourseId,
       year: semesterSelected.match(/\d+/g).map(Number)[0],
       semester: semesterSelected.replace(semesterSelected.match(/\d+/g).map(Number)[0], '').trim()
     }
 
-    await AddClassToPlanned(data, dispatch)
-    await GetPlannedCourses(dispatch)
+    await AddClassToPlanned(data)
+    await GetPlannedCourses(dispatch, setSemesterSelected)
     modalToggle()
   }
 
