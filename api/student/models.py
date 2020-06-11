@@ -71,8 +71,8 @@ class Student(AbstractUser):
 
 class CompletedCourse(Model):
     class Meta:
-        aws_access_key_id = 'AKIA36TR6B75TJCWV64C'
-        aws_secret_access_key = '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'
+        aws_access_key_id = ''
+        aws_secret_access_key = ''
         region = 'us-west-2'
         table_name = "CompletedCourses"
 
@@ -83,8 +83,8 @@ class CompletedCourse(Model):
 
 class PlannedCourse(Model):
     class Meta:
-        aws_access_key_id = 'AKIA36TR6B75TJCWV64C'
-        aws_secret_access_key = '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'
+        aws_access_key_id = ''
+        aws_secret_access_key = ''
         region = 'us-west-2'
         table_name = "PlannedCourses"
 
