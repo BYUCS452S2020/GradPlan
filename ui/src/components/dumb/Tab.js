@@ -23,5 +23,5 @@ Tab.propTypes = {
   activeTab: PropTypes.string,
   toggle: PropTypes.func,
   title: PropTypes.string,
-  id: PropTypes.number,
+  id: PropTypes.string,
 }

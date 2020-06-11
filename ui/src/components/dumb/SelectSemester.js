@@ -10,7 +10,7 @@ export const SelectSemester = (props) => {
         <Input type='select' value={selectSemester} onChange={setSemesterSelected}>
           {
             props.semesters.map((value) => {
-              return <option>{`${value.semester} ${value.year}`}</option>
+              return <option>{value.semester}</option>
             })
           }
         </Input>
